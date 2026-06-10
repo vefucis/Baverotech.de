@@ -1,12 +1,6 @@
-/* ============================================================
-   Baverotech — main.js
-   Projekti + lightbox + reveal + navigācija + forma
-   ============================================================ */
 (function () {
   "use strict";
 
-  /* Demo attēli no picsum.photos (vajadzīgs internets).
-     Īstos foto liek mapē images/ un nomaina ceļus zemāk. */
   function img(seed, w, h) {
     return "https://picsum.photos/seed/baverotech-" + seed + "/" + w + "/" + h;
   }
@@ -76,7 +70,7 @@
     listEl.appendChild(el);
   });
 
-  /* ---- Lightbox ---- */
+  /* ---- lightb ---- */
   var lb = document.getElementById("lightbox");
   var lbImage = document.getElementById("lbImage");
   var lbCaption = document.getElementById("lbCaption");
@@ -137,7 +131,7 @@
     if (e.key === "ArrowRight") step(1);
   });
 
-  /* ---- Reveal (sadaļas + hero rindas) ---- */
+  /* ---- hero ---- */
   var revealEls = document.querySelectorAll(".reveal, .reveal-line");
   if ("IntersectionObserver" in window) {
     var io = new IntersectionObserver(function (entries) {
@@ -150,13 +144,13 @@
     revealEls.forEach(function (el) { el.classList.add("is-visible"); });
   }
 
-  /* ---- Header scroll ---- */
+  /* ---- skrūlef ---- */
   var header = document.getElementById("header");
   function onScroll() { header.classList.toggle("is-scrolled", window.scrollY > 24); }
   onScroll();
   window.addEventListener("scroll", onScroll, { passive: true });
 
-  /* ---- Mobilā navigācija ---- */
+  /* ---- mnav ---- */
   var toggle = document.getElementById("navToggle");
   var nav = document.getElementById("nav");
   toggle.addEventListener("click", function () {
@@ -167,7 +161,6 @@
     if (e.target.tagName === "A") { nav.classList.remove("is-open"); toggle.setAttribute("aria-expanded", "false"); }
   });
 
-  /* ---- Forma (demo) ---- */
   var form = document.getElementById("contactForm");
   var note = document.getElementById("formNote");
   form.addEventListener("submit", function (e) {
