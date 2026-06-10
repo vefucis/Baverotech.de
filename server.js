@@ -1,4 +1,4 @@
-// Vienkāršs statisks failu serveris lokālai apskatei: `node server.js`
+// locallll
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
