@@ -347,5 +347,100 @@
     });
   })();
 
+  /* ---- hero ievada animācija (GSAP) ---- */
+  (function () {
+    var reduceM = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var hero = document.querySelector(".hero");
+    if (!hero || !window.gsap || reduceM) return; /* bez GSAP paliek CSS reveal */
+
+    var topItems = hero.querySelectorAll(".hero__top span");
+    var lines = hero.querySelectorAll(".hero__title .reveal-line > span");
+    var asideP = hero.querySelectorAll(".hero__aside p");
+    var photo = hero.querySelector(".hero__photo");
+    var img = photo && photo.querySelector("img");
+    var stats = hero.querySelectorAll(".hero__stats .hs");
+
+    /* GSAP pārņem — neitralizē CSS reveal pārejas hero sekcijā */
+    Array.prototype.forEach.call(hero.querySelectorAll(".reveal, .reveal-line, .reveal-line > span"), function (el) {
+      el.style.transition = "none";
+      el.classList.add("is-visible");
+    });
+
+    var tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+    tl.fromTo(topItems, { y: -14, opacity: 0 }, { y: 0, opacity: 1, duration: .6, stagger: .08 }, 0)
+      .fromTo(lines, { yPercent: 110 }, { yPercent: 0, duration: 1, stagger: .14, ease: "power4.out" }, .1);
+    if (photo && img) {
+      tl.fromTo(photo, { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 1.15, ease: "power4.inOut" }, .25)
+        .fromTo(img, { scale: 1.16 }, { scale: 1, duration: 1.6, ease: "power2.out" }, .25);
+    }
+    tl.fromTo(asideP, { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: .7, stagger: .12 }, .6)
+      .fromTo(stats, { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: .7, stagger: .09 }, .8);
+
+    /* maiga foto paralakse skrullējot */
+    if (img) {
+      var toY = gsap.quickTo(img, "yPercent", { duration: .5, ease: "power2.out" });
+      window.addEventListener("scroll", function () {
+        var k = Math.max(0, Math.min(window.scrollY / (hero.offsetHeight || 1), 1));
+        toY(k * 7);
+      }, { passive: true });
+    }
+  })();
+
+  /* ---- GSAP ienākšanas animācijas: galerija un projekti ---- */
+  (function () {
+    var reduceM = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!window.gsap || reduceM || !("IntersectionObserver" in window)) return;
+
+    function takeover(el) { el.style.transition = "none"; el.classList.add("is-visible"); }
+
+    var io2 = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        io2.unobserve(en.target);
+        if (en.target.__play) en.target.__play();
+      });
+    }, { threshold: 0.16, rootMargin: "0px 0px -6% 0px" });
+
+    /* galerija: kartītes ieslīd no labās ar stagger, pogas uznirst pēc tam */
+    var gal = document.querySelector(".gallery");
+    if (gal) {
+      takeover(gal);
+      var gItems = Array.prototype.slice.call(gal.querySelectorAll(".gallery__item"), 0, 8);
+      var gNav = gal.querySelectorAll(".gallery__nav");
+      gsap.set(gItems, { x: 80, opacity: 0 });
+      gsap.set(gNav, { opacity: 0 });
+      gal.__play = function () {
+        gsap.timeline({ defaults: { ease: "power3.out" } })
+          .to(gItems, { x: 0, opacity: 1, duration: .9, stagger: .07, clearProps: "transform,opacity" })
+          .to(gNav, { opacity: 1, duration: .5, clearProps: "opacity" }, "-=.45");
+      };
+      io2.observe(gal);
+    }
+
+    /* projekti: attēla clip-wipe (pamīšus virziens) + satura stagger */
+    Array.prototype.forEach.call(document.querySelectorAll(".proj"), function (proj, i) {
+      takeover(proj);
+      var wrap = proj.querySelector(".proj__img");
+      var pimg = wrap && wrap.querySelector("img");
+      var info = proj.querySelectorAll(".proj__cat, .proj__title, .proj__desc, .proj__meta");
+      var thumbs = proj.querySelectorAll(".thumb");
+      var fromRight = i % 2 === 1;
+      if (wrap) gsap.set(wrap, { clipPath: fromRight ? "inset(0% 0% 0% 100%)" : "inset(0% 100% 0% 0%)" });
+      if (pimg) { pimg.style.transition = "none"; gsap.set(pimg, { scale: 1.15 }); }
+      gsap.set(info, { y: 26, opacity: 0 });
+      gsap.set(thumbs, { y: 16, opacity: 0 });
+      proj.__play = function () {
+        var tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+        if (wrap) tl.to(wrap, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.05, ease: "power4.inOut", clearProps: "clipPath" }, 0);
+        if (pimg) tl.to(pimg, { scale: 1.01, duration: 1.5, ease: "power2.out", onComplete: function () {
+          gsap.set(pimg, { clearProps: "transform" }); pimg.style.transition = ""; /* atdod CSS hover */
+        } }, 0);
+        tl.to(info, { y: 0, opacity: 1, duration: .65, stagger: .09, clearProps: "all" }, .25)
+          .to(thumbs, { y: 0, opacity: 1, duration: .5, stagger: .05, clearProps: "all" }, .5);
+      };
+      io2.observe(proj);
+    });
+  })();
+
   document.getElementById("year").textContent = new Date().getFullYear();
 })();
