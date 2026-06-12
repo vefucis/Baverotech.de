@@ -403,10 +403,10 @@ a { color: inherit; text-decoration: none; }
 .lb.is-open .lb__stage img { transform: none; opacity: 1; }
 .lb__stage figcaption { display: flex; justify-content: space-between; gap: 16px; color: var(--paper); font-size: .95rem; }
 .lb__counter { color: var(--soft-2); }
-.lb__close { position: absolute; top: 24px; right: 30px; background: none; border: 0; color: var(--paper); font-size: 1.5rem; cursor: pointer; opacity: .7; transition: opacity .2s, transform .3s; }
+.lb__close { position: absolute; top: 24px; right: 30px; z-index: 2; background: none; border: 0; color: var(--paper); font-size: 1.5rem; cursor: pointer; opacity: .7; transition: opacity .2s, transform .3s; }
 .lb__close:hover { opacity: 1; transform: rotate(90deg); }
 .lb__nav {
-  position: absolute; top: 50%;
+  position: absolute; top: 50%; z-index: 2;
   width: clamp(42px, 4vw, 56px); height: clamp(42px, 4vw, 56px);
   display: grid; place-items: center;
   border: 0; cursor: pointer; padding: 0;
