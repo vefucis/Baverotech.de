@@ -81,7 +81,7 @@
   var lbImage = document.getElementById("lbImage");
   var lbCaption = document.getElementById("lbCaption");
   var lbCounter = document.getElementById("lbCounter");
-  var current = { project: 0, index: 0 };
+  var current = { images: [], index: 0 };
 
   function projectImages(p) {
     var imgs = [{ src: PROJECTS[p].main, cap: PROJECTS[p].title }];
@@ -91,7 +91,8 @@
     return imgs;
   }
   function showImage() {
-    var imgs = projectImages(current.project);
+    var imgs = current.images;
+    if (!imgs.length) return;
     if (current.index < 0) current.index = imgs.length - 1;
     if (current.index >= imgs.length) current.index = 0;
     var it = imgs[current.index];
@@ -102,8 +103,8 @@
     lbCaption.textContent = it.cap;
     lbCounter.textContent = (current.index + 1) + " / " + imgs.length;
   }
-  function openLightbox(p, idx) {
-    current.project = p; current.index = idx; showImage();
+  function openLightbox(project, idx) {
+    current.images = projectImages(project); current.index = idx; showImage();
     lb.classList.add("is-open"); lb.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
   }
