@@ -97,10 +97,13 @@
     lbCaption.textContent = it.cap;
     lbCounter.textContent = (current.index + 1) + " / " + imgs.length;
   }
-  function openLightbox(project, idx) {
-    current.images = projectImages(project); current.index = idx; showImage();
+  function openImages(imgs, idx) {
+    current.images = imgs; current.index = idx; showImage();
     lb.classList.add("is-open"); lb.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
+  }
+  function openLightbox(project, idx) {
+    openImages(projectImages(project), idx);
   }
   function closeLightbox() {
     lb.classList.remove("is-open"); lb.setAttribute("aria-hidden", "true");
@@ -170,6 +173,66 @@
     note.hidden = false;
     form.querySelectorAll("input, textarea, select").forEach(function (f) { if (f.type !== "submit") f.value = ""; });
   });
+
+  /* ---- galerijas karuselis (bezgalīgs loops) ---- */
+  (function () {
+    var gallery = document.getElementById("gallery");
+    if (!gallery) return;
+    var viewport = gallery.querySelector(".gallery__viewport");
+    var track = gallery.querySelector(".gallery__track");
+    var prev = gallery.querySelector(".gallery__nav--prev");
+    var next = gallery.querySelector(".gallery__nav--next");
+    if (!viewport || !track) return;
+
+    /* dublē attēlu kopu, lai loops būtu nemanāms */
+    var originals = Array.prototype.slice.call(track.children);
+    originals.forEach(function (node) {
+      var clone = node.cloneNode(true);
+      clone.setAttribute("aria-hidden", "true");
+      track.appendChild(clone);
+    });
+
+    /* lightbox: pilna izmēra attēli (no oriģinālajiem, ne klonētajiem) */
+    var lbImages = originals.map(function (node) {
+      var im = node.querySelector("img");
+      return { src: im.getAttribute("src"), cap: im.getAttribute("alt") || "" };
+    });
+    track.addEventListener("click", function (e) {
+      var item = e.target.closest(".gallery__item");
+      if (!item) return;
+      var idx = Array.prototype.indexOf.call(track.children, item) % originals.length;
+      openImages(lbImages, idx);
+    });
+
+    function itemStep() {
+      var first = track.firstElementChild;
+      if (!first) return viewport.clientWidth;
+      return first.getBoundingClientRect().width + 5; /* attēls + margin-right */
+    }
+    function oneSet() { return track.scrollWidth / 2; } /* vienas kopas platums */
+
+    function go(dir) {
+      var step = itemStep();
+      var set = oneSet();
+      /* pirms soļa nemanāmi pārlecam uz ekvivalento pozīciju otrā kopā, lai vienmēr ir vieta kustēties */
+      if (dir > 0 && viewport.scrollLeft >= set) viewport.scrollLeft -= set;
+      else if (dir < 0 && viewport.scrollLeft < step) viewport.scrollLeft += set;
+      viewport.scrollBy({ left: dir * step, behavior: "smooth" });
+    }
+    if (prev) prev.addEventListener("click", function () { go(-1); });
+    if (next) next.addEventListener("click", function () { go(1); });
+
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var timer = null;
+    function startAuto() { if (!reduce && !timer) timer = setInterval(function () { go(1); }, 3500); }
+    function stopAuto() { if (timer) { clearInterval(timer); timer = null; } }
+    gallery.addEventListener("mouseenter", stopAuto);
+    gallery.addEventListener("mouseleave", startAuto);
+    gallery.addEventListener("focusin", stopAuto);
+    gallery.addEventListener("focusout", startAuto);
+    document.addEventListener("visibilitychange", function () { document.hidden ? stopAuto() : startAuto(); });
+    startAuto();
+  })();
 
   document.getElementById("year").textContent = new Date().getFullYear();
 })();

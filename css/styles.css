@@ -239,14 +239,35 @@ a { color: inherit; text-decoration: none; }
 .logos__item:hover { opacity: 1; transform: translateY(-2px); }
 @keyframes logos-scroll { to { transform: translateX(-50%); } }
 
-/* ===== Pilnplatuma attēlu galerija (auto-scroll) ===== */
-.gallery { overflow: hidden; margin-top: clamp(44px, 5vw, 76px); }
-.gallery__track { display: flex; width: max-content; animation: gallery-scroll 150s linear infinite; }
-.gallery:hover .gallery__track { animation-play-state: paused; }
-.gallery__item { flex: 0 0 auto; width: clamp(200px, 30vw, 500px); aspect-ratio: 1; margin-right: 5px; overflow: hidden; border-radius: 3px; background: var(--paper-2); }
+/* ===== Pilnplatuma attēlu galerija (karuselis) ===== */
+.gallery { position: relative; margin-top: clamp(44px, 5vw, 76px); }
+.gallery__viewport { overflow-x: auto; scroll-snap-type: x proximity; scroll-behavior: smooth; -ms-overflow-style: none; scrollbar-width: none; }
+.gallery__viewport::-webkit-scrollbar { display: none; }
+.gallery__track { display: flex; width: max-content; }
+.gallery__item { flex: 0 0 auto; width: clamp(200px, 30vw, 500px); aspect-ratio: 1; margin-right: 5px; overflow: hidden; border-radius: 3px; background: var(--paper-2); scroll-snap-align: start; cursor: pointer; }
 .gallery__item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s var(--ease); }
 .gallery__item:hover img { transform: scale(1.05); }
-@keyframes gallery-scroll { to { transform: translateX(-50%); } }
+
+.gallery__nav {
+  position: absolute; top: 50%; z-index: 2;
+  width: clamp(42px, 4vw, 56px); height: clamp(42px, 4vw, 56px);
+  display: grid; place-items: center;
+  border: none; cursor: pointer; padding: 0;
+  background: var(--accent); color: var(--paper);
+  border-radius: 50%;
+  transition: background .25s var(--ease), transform .25s var(--ease);
+}
+.gallery__nav svg {
+  width: 42%; height: 42%;
+  fill: none; stroke: currentColor; stroke-width: 2.2;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.gallery__nav:hover { background: var(--ink); }
+.gallery__nav:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.gallery__nav--prev { left: clamp(8px, 1.5vw, 20px); transform: translateY(-50%); }
+.gallery__nav--next { right: clamp(8px, 1.5vw, 20px); transform: translateY(-50%); }
+.gallery__nav--prev:hover { transform: translateY(-50%) translateX(-3px); }
+.gallery__nav--next:hover { transform: translateY(-50%) translateX(3px); }
 
 /* ===== Katalogs (sortiments) ===== */
 .catgrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(20px, 2.6vw, 44px); border-top: 1px solid var(--line); }
@@ -320,8 +341,14 @@ a { color: inherit; text-decoration: none; }
 .form__note { grid-column: 1 / -1; font-weight: 500; color: #2c6e3f; }
 
 /* ===== Footer ===== */
-.footer { background: var(--ink); color: var(--paper); padding: clamp(60px, 8vw, 100px) 0 40px; }
-.footer__mark { display: block; color: var(--paper); }
+.footer { background: var(--ink); color: var(--paper); padding: clamp(44px, 6vw, 76px) 0 40px; overflow: hidden; }
+.footer__mark {
+  display: block;
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
+  padding-inline: clamp(10px, 1.6vw, 24px);
+  color: var(--paper);
+}
 .footer__mark svg { display: block; width: 100%; height: auto; }
 .footer__mark text { font-family: var(--disp); font-weight: 900; }
 .footer__row { display: flex; justify-content: space-between; gap: 40px; flex-wrap: wrap; padding: 40px 0; margin-top: 20px; border-top: 1px solid var(--line-light); }
@@ -341,10 +368,22 @@ a { color: inherit; text-decoration: none; }
 .lb__counter { color: var(--soft-2); }
 .lb__close { position: absolute; top: 24px; right: 30px; background: none; border: 0; color: var(--paper); font-size: 1.5rem; cursor: pointer; opacity: .7; transition: opacity .2s, transform .3s; }
 .lb__close:hover { opacity: 1; transform: rotate(90deg); }
-.lb__nav { position: absolute; top: 50%; transform: translateY(-50%); background: none; border: 0; color: var(--paper); font-size: 1.8rem; cursor: pointer; opacity: .6; transition: opacity .25s, color .25s; padding: 16px; }
-.lb__nav:hover { opacity: 1; color: var(--accent); }
-.lb__nav--prev { left: 1vw; }
-.lb__nav--next { right: 1vw; }
+.lb__nav {
+  position: absolute; top: 50%;
+  width: clamp(42px, 4vw, 56px); height: clamp(42px, 4vw, 56px);
+  display: grid; place-items: center;
+  border: 0; cursor: pointer; padding: 0;
+  background: var(--accent); color: var(--paper);
+  border-radius: 50%;
+  transition: filter .25s var(--ease), transform .25s var(--ease);
+}
+.lb__nav svg { width: 42%; height: 42%; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.lb__nav:hover { filter: brightness(1.12); }
+.lb__nav:focus-visible { outline: 2px solid var(--paper); outline-offset: 3px; }
+.lb__nav--prev { left: 1vw; transform: translateY(-50%); }
+.lb__nav--next { right: 1vw; transform: translateY(-50%); }
+.lb__nav--prev:hover { transform: translateY(-50%) translateX(-3px); }
+.lb__nav--next:hover { transform: translateY(-50%) translateX(3px); }
 
 /* ===== Reveal ===== */
 .reveal { opacity: 0; transform: translateY(26px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
