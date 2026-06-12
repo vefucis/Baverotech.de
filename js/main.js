@@ -224,13 +224,25 @@
 
     var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     var timer = null;
-    function startAuto() { if (!reduce && !timer) timer = setInterval(function () { go(1); }, 3500); }
+    var inView = true;
+    function startAuto() { if (!reduce && inView && !timer) timer = setInterval(function () { go(1); }, 3500); }
     function stopAuto() { if (timer) { clearInterval(timer); timer = null; } }
     gallery.addEventListener("mouseenter", stopAuto);
     gallery.addEventListener("mouseleave", startAuto);
     gallery.addEventListener("focusin", stopAuto);
     gallery.addEventListener("focusout", startAuto);
     document.addEventListener("visibilitychange", function () { document.hidden ? stopAuto() : startAuto(); });
+    /* autoplay tikai tad, kad galerija ir redzeslokā */
+    if ("IntersectionObserver" in window) {
+      inView = false;
+      var galIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          inView = en.isIntersecting;
+          if (inView) startAuto(); else stopAuto();
+        });
+      }, { threshold: .2 });
+      galIO.observe(gallery);
+    }
     startAuto();
   })();
 
@@ -401,18 +413,19 @@
       });
     }, { threshold: 0.16, rootMargin: "0px 0px -6% 0px" });
 
-    /* galerija: kartītes ieslīd no labās ar stagger, pogas uznirst pēc tam */
+    /* galerija: viss bloks ienāk kā viens (item netiek kustināti — netraucē
+       karuseļa skrullam un lazy-load attēliem) */
     var gal = document.querySelector(".gallery");
     if (gal) {
       takeover(gal);
-      var gItems = Array.prototype.slice.call(gal.querySelectorAll(".gallery__item"), 0, 8);
+      var gView = gal.querySelector(".gallery__viewport");
       var gNav = gal.querySelectorAll(".gallery__nav");
-      gsap.set(gItems, { x: 80, opacity: 0 });
+      gsap.set(gView, { y: 56, opacity: 0 });
       gsap.set(gNav, { opacity: 0 });
       gal.__play = function () {
         gsap.timeline({ defaults: { ease: "power3.out" } })
-          .to(gItems, { x: 0, opacity: 1, duration: .9, stagger: .07, clearProps: "transform,opacity" })
-          .to(gNav, { opacity: 1, duration: .5, clearProps: "opacity" }, "-=.45");
+          .to(gView, { y: 0, opacity: 1, duration: .9, clearProps: "transform,opacity" })
+          .to(gNav, { opacity: 1, duration: .5, clearProps: "opacity" }, "-=.4");
       };
       io2.observe(gal);
     }
