@@ -10,7 +10,7 @@
       cat: "Privātmāja",
       title: "Privātmājas dakstiņu jumts",
       desc: "Keramikas dakstiņu jumts ar pilnu komplektāciju. Pasegums, ventilācija, lietusūdens un sniega aizturi.",
-      meta: [["Segums", "Dakstiņi"], ["Platība", "240 m²"], ["Gads", "2024"]],
+      meta: [["Segums", "Dakstiņi"], ["Platība", "240 m²"], ["Gads", "2024"], ["Cena", "Pēc tāmes"], ["Lokācija", "Latvija"]],
       main: img("1-main", 1280, 960),
       gallery: ["1-a", "1-b", "1-c", "1-d", "1-e", "1-f", "1-g"]
     },
@@ -18,7 +18,7 @@
       cat: "Fasāde",
       title: "Fasādes apšuvums un siltināšana",
       desc: "Ventilējamā fasāde ar jaunu apšuvumu. Materiāli un montāža saskaņoti vienā risinājumā.",
-      meta: [["Sistēma", "Ventilējamā"], ["Platība", "310 m²"], ["Gads", "2023"]],
+      meta: [["Sistēma", "Ventilējamā"], ["Platība", "310 m²"], ["Gads", "2023"], ["Cena", "Pēc tāmes"], ["Lokācija", "Latvija"]],
       main: img("2-main", 1280, 960),
       gallery: ["2-a", "2-b", "2-c", "2-d", "2-e", "2-f"]
     },
@@ -26,7 +26,7 @@
       cat: "Industriāls objekts",
       title: "Industriāls trapecprofila jumts",
       desc: "Lielas platības segums ar trapecprofilu, drošības elementiem un ūdens novadīšanu. Nodots grafikā.",
-      meta: [["Segums", "Trapecprofils"], ["Platība", "2 400 m²"], ["Gads", "2025"]],
+      meta: [["Segums", "Trapecprofils"], ["Platība", "2 400 m²"], ["Gads", "2025"], ["Cena", "Pēc tāmes"], ["Lokācija", "Latvija"]],
       main: img("3-main", 1280, 960),
       gallery: ["3-a", "3-b", "3-c", "3-d", "3-e", "3-f", "3-g", "3-h"]
     }
@@ -75,7 +75,7 @@
   var lbImage = document.getElementById("lbImage");
   var lbCaption = document.getElementById("lbCaption");
   var lbCounter = document.getElementById("lbCounter");
-  var current = { project: 0, index: 0 };
+  var current = { images: [], index: 0 };
 
   function projectImages(p) {
     var imgs = [{ src: PROJECTS[p].main, cap: PROJECTS[p].title }];
@@ -85,7 +85,8 @@
     return imgs;
   }
   function showImage() {
-    var imgs = projectImages(current.project);
+    var imgs = current.images;
+    if (!imgs.length) return;
     if (current.index < 0) current.index = imgs.length - 1;
     if (current.index >= imgs.length) current.index = 0;
     var it = imgs[current.index];
@@ -96,8 +97,8 @@
     lbCaption.textContent = it.cap;
     lbCounter.textContent = (current.index + 1) + " / " + imgs.length;
   }
-  function openLightbox(p, idx) {
-    current.project = p; current.index = idx; showImage();
+  function openLightbox(project, idx) {
+    current.images = projectImages(project); current.index = idx; showImage();
     lb.classList.add("is-open"); lb.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
   }
