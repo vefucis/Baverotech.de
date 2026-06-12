@@ -219,27 +219,37 @@ a { color: inherit; text-decoration: none; }
   color: var(--soft-2);
 }
 
-/* Materiālu produkti — klikšķināmi ar premium hover (popup) */
+/* Materiālu produkti — redakcionālas teksta kartiņas (popup) */
 .svc--materials .svc__row::before { display: none; }              /* nost tumšo row-invert */
 .svc--materials .svc__row:hover { color: inherit; }
-.svc--materials .svc__row:hover .svc__list li {                   /* atceļ row-hover izmaiņas, lai darbojas per-item */
-  border-color: var(--line); background: rgba(244, 242, 237, .42); color: var(--soft);
-}
+.svc--materials .svc__list { grid-template-columns: repeat(3, 1fr); gap: 14px; max-width: 1000px; }
+
 .svc__list li.prod {
-  cursor: pointer; padding-right: 38px;
-  transition: transform .3s var(--ease), border-color .3s var(--ease), background .3s, box-shadow .3s, color .3s;
+  position: relative; display: flex; flex-direction: column; gap: 12px;
+  padding: 18px 44px 18px 20px; min-height: 0; cursor: pointer;
+  border: 1px solid var(--line); border-radius: 5px; background: var(--paper); color: var(--ink);
+  transition: transform .35s var(--ease), border-color .35s var(--ease), box-shadow .35s var(--ease);
 }
-.svc__list li.prod::after {
-  content: "↗"; font-style: normal; position: absolute; right: 13px; top: 50%;
-  transform: translateY(-50%) translateX(-3px); color: var(--accent);
-  opacity: 0; transition: opacity .3s var(--ease), transform .3s var(--ease);
+.svc__list li.prod::before, .svc__list li.prod::after { display: none; }   /* nost veco bullet/arrow */
+.svc--materials .svc__row:hover .svc__list li.prod {                       /* atceļ row-hover izmaiņas */
+  border-color: var(--line); background: var(--paper); color: var(--ink);
+}
+.prod__idx { font-size: .72rem; color: var(--accent); letter-spacing: .14em; }
+.prod__name { font-family: var(--disp); font-weight: 600; font-size: 1.22rem; letter-spacing: -.01em; line-height: 1.22; color: var(--ink); }
+.prod__desc {
+  color: var(--soft); font-size: .9rem; line-height: 1.5; margin-top: -4px;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.prod__go {
+  font-style: normal; position: absolute; top: 16px; right: 16px; color: var(--accent);
+  opacity: 0; transform: translate(-4px, 4px); transition: opacity .35s var(--ease), transform .35s var(--ease);
 }
 .svc__list li.prod:hover,
 .svc--materials .svc__row:hover .svc__list li.prod:hover {
-  transform: translateY(-3px); border-color: var(--accent); background: var(--paper);
-  color: var(--ink); box-shadow: 0 16px 34px -22px rgba(23, 41, 68, .55);
+  transform: translateY(-4px); border-color: var(--accent);
+  box-shadow: 0 18px 38px -22px rgba(23, 41, 68, .55);
 }
-.svc__list li.prod:hover::after { opacity: 1; transform: translateY(-50%) translateX(0); }
+.svc__list li.prod:hover .prod__go { opacity: 1; transform: none; }
 .svc__list li.prod:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 .svc__arrow { font-style: normal; font-size: 1.4rem; color: var(--soft); transition: transform .4s var(--ease), color .3s; }
@@ -271,7 +281,7 @@ a { color: inherit; text-decoration: none; }
 .gallery__viewport { overflow-x: auto; scroll-snap-type: x proximity; scroll-behavior: smooth; -ms-overflow-style: none; scrollbar-width: none; }
 .gallery__viewport::-webkit-scrollbar { display: none; }
 .gallery__track { display: flex; width: max-content; }
-.gallery__item { flex: 0 0 auto; width: clamp(200px, 30vw, 500px); aspect-ratio: 1; margin-right: 5px; overflow: hidden; border-radius: 3px; background: var(--paper-2); scroll-snap-align: start; cursor: pointer; }
+.gallery__item { flex: 0 0 auto; width: clamp(330px, 35vw, 600px); aspect-ratio: 1; margin-right: 5px; overflow: hidden; border-radius: 3px; background: var(--paper-2); scroll-snap-align: start; cursor: pointer; }
 .gallery__item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s var(--ease); }
 .gallery__item:hover img { transform: scale(1.05); }
 
@@ -463,6 +473,7 @@ a { color: inherit; text-decoration: none; }
   .catgrid { grid-template-columns: repeat(2, 1fr); gap: 4px 32px; }
   .hero__stats { grid-template-columns: repeat(2, 1fr); gap: 30px 24px; }
   .lead--row { align-items: flex-start; }
+  .svc--materials .svc__list { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 680px) {
   :root { --gut: 20px; }
@@ -480,6 +491,8 @@ a { color: inherit; text-decoration: none; }
   .svc__body { grid-column: 1 / -1; grid-row: 2; }
   .svc__list { grid-template-columns: 1fr; gap: 8px; }
   .svc__list li { min-height: auto; padding-block: 10px; font-size: .92rem; }
+  .svc--materials .svc__list { grid-template-columns: 1fr; gap: 10px; }
+  .svc__list li.prod { padding-block: 14px; }
   .thumbs { grid-template-columns: repeat(5, 1fr); }
   .proj__meta { gap: 20px; }
 }

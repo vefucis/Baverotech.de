@@ -322,9 +322,16 @@
       if (!p) return;
       p.title = name;
       li.classList.add("prod");
+      var idx = Array.prototype.indexOf.call(li.parentElement.children, li) + 1;
+      li.innerHTML =
+        '<span class="prod__idx mono">' + (idx < 10 ? "0" + idx : idx) + '</span>' +
+        '<span class="prod__name">' + name + '</span>' +
+        '<span class="prod__desc">' + p.desc + '</span>' +
+        '<i class="prod__go" aria-hidden="true">↗</i>';
       li.setAttribute("role", "button");
       li.setAttribute("tabindex", "0");
       li.setAttribute("aria-haspopup", "dialog");
+      li.setAttribute("aria-label", name + " — atvērt informāciju");
       li.addEventListener("click", function () { openProduct(p); });
       li.addEventListener("keydown", function (e) {
         if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openProduct(p); }
