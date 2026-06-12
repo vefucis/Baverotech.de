@@ -234,5 +234,111 @@
     startAuto();
   })();
 
+  /* ---- Sortiments produktu popup ---- */
+  (function () {
+    function g(name) { return "images/Galerija/" + name + ".webp"; }
+    /* PLACEHOLDER saturs — aizvieto bildes (img) un aprakstus (desc) ar īstajiem.
+       Atslēga = saraksta vienuma teksts index.html (.svc--materials .svc__list li). */
+    var PRODUCTS = {
+      "Valcētā skārda segumi": { cat: "Jumta materiāli", img: g("stehfalzdach"), desc: "Nepārtraukti valcēts skārda segums ar slēptu savienojumu — hermētisks un izturīgs risinājums gan vienkāršām, gan sarežģītām jumta formām." },
+      "Valcprofils klik, trapecveida profils": { cat: "Jumta materiāli", img: g("trapezblech-dachdeckung"), desc: "Tērauda loksnes profili ar ātru klik savienojumu vai klasisko trapecveida formu — ekonomisks un ātri montējams jumta segums." },
+      "Bezazbesta šīferis": { cat: "Jumta materiāli", img: g("asbestfreie-wellplatten"), desc: "Mūsdienīgs šķiedru cementa vilnītis bez azbesta — drošs un ilgmūžīgs segums ar tradicionālu izskatu." },
+      "Māla un betona dakstiņi": { cat: "Jumta materiāli", img: g("tondachziegel"), desc: "Dabīgi māla un betona dakstiņi ar augstu izturību un plašu krāsu klāstu reprezentablam jumtam." },
+      "Skursteņu cepures": { cat: "Jumta materiāli", img: g("blechformteile"), desc: "Skursteņu pārsegi un cepures, kas pasargā dūmvadu no nokrišņiem un uzlabo vilkmi." },
+      "Jumta laipas un citi piekļuves risinājumi": { cat: "Jumta materiāli", img: g("stehfalz-detailausbildung"), desc: "Drošas jumta laipas, kāpšļi un servisa platformas ērtai un drošai piekļuvei apkopes darbiem." },
+      "Sniega aiztures un jumta drošības elementi": { cat: "Jumta materiāli", img: g("stehfalzblechdach"), desc: "Sniega barjeras, drošības āķi un norobežojumi, kas pasargā cilvēkus un īpašumu zem jumta." },
+      "Ventilācijas sistēmas": { cat: "Jumta materiāli", img: g("dachbelueftung"), desc: "Jumta ventilācijas elementi, kas nodrošina pareizu gaisa apmaiņu un pasargā konstrukciju no mitruma." },
+      "Lietus ūdens novadīšanas sistēmas": { cat: "Jumta materiāli", img: g("dachrinne"), desc: "Pilnas lietusūdens sistēmas — renes, notekcaurules un piederumi efektīvai ūdens novadīšanai." },
+
+      "Fasāžu apšuvuma materiāli": { cat: "Fasādes", img: g("holzfassade"), desc: "Daudzveidīgi fasādes apšuvuma materiāli — metāls, kompozīts un koks — estētiskam un izturīgam ēkas veidolam." },
+      "Ventilējamās fasādes sistēmas": { cat: "Fasādes", img: g("dach-und-fassadenmaterialien"), desc: "Ventilējamās fasādes ar gaisa spraugu, kas uzlabo ēkas energoefektivitāti un pagarina apdares kalpošanas laiku." },
+      "Stiprinājumi un profili": { cat: "Fasādes", img: g("blechprofile-und-formteile"), desc: "Apakškonstrukcijas profili un stiprinājumi, kas nodrošina drošu un precīzu fasādes montāžu." },
+      "Sistēmu komplektācija un montāža": { cat: "Fasādes", img: g("metalldachmaterialien"), desc: "Pilna fasādes sistēmas komplektācija ar saskaņotiem elementiem un profesionālu montāžas atbalstu." },
+      "Sendvičpaneļi": { cat: "Fasādes", img: g("stehfalzblechdach"), desc: "Siltinātie sendvičpaneļi ātrai fasāžu un jumtu montāžai ar augstu siltumizolāciju." },
+
+      "Zāģmateriāli": { cat: "Koka un metāla konstrukcijas", img: g("bauholz"), desc: "Kvalitatīvi zāģmateriāli būvniecībai — žāvēti, kalibrēti un gatavi lietošanai." },
+      "Konstrukciju kokmateriāli": { cat: "Koka un metāla konstrukcijas", img: g("sparren-und-konstruktionsholz"), desc: "Konstrukciju un nesošie kokmateriāli ar sertificētu izturību jumta un karkasa risinājumiem." },
+      "Tērauda konstruktīvie profili": { cat: "Koka un metāla konstrukcijas", img: g("dachbinder"), desc: "Tērauda konstruktīvie profili nesošajām konstrukcijām — izturīgi, precīzi un ilgmūžīgi." },
+
+      "Kamīna malka": { cat: "Siltumenerģija", img: g("bauholz"), desc: "Žāvēta lapu koku malka ar augstu siltumatdevi kamīniem un krāsnīm." },
+      "Kokogles": { cat: "Siltumenerģija", img: g("dachmaterialien"), desc: "Tīras kokogles stabilai temperatūrai un ilgai, vienmērīgai degšanai." },
+      "Briketes": { cat: "Siltumenerģija", img: g("sparren-und-konstruktionsholz"), desc: "Presētas kurināmā briketes ar augstu enerģijas blīvumu un minimāliem pelniem." },
+      "Granulas": { cat: "Siltumenerģija", img: g("bauholz"), desc: "Koksnes granulas automātiskajiem apkures katliem — efektīvs un ekoloģisks kurināmais." }
+    };
+
+    var pop = document.getElementById("productPopup");
+    if (!pop) return;
+    var card = pop.querySelector(".pop__card");
+    var backdrop = pop.querySelector(".pop__backdrop");
+    var popImage = document.getElementById("popImage");
+    var popCat = document.getElementById("popCat");
+    var popTitle = document.getElementById("popTitle");
+    var popDesc = document.getElementById("popDesc");
+    var bodyEls = pop.querySelectorAll(".pop__body > *");
+    var lastFocus = null;
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var hasGsap = !!window.gsap && !reduce;
+
+    function openProduct(p) {
+      popCat.textContent = p.cat;
+      popTitle.textContent = p.title;
+      popDesc.textContent = p.desc;
+      popImage.src = p.img; popImage.alt = p.title;
+      lastFocus = document.activeElement;
+      pop.classList.add("is-open"); pop.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+      document.getElementById("popClose").focus();
+
+      if (hasGsap) {
+        gsap.killTweensOf([backdrop, card, popImage, bodyEls]);
+        gsap.timeline()
+          .fromTo(backdrop, { opacity: 0 }, { opacity: 1, duration: .35, ease: "power2.out" })
+          .fromTo(card, { opacity: 0, y: 26, scale: .96 }, { opacity: 1, y: 0, scale: 1, duration: .5, ease: "power3.out" }, "-=.18")
+          .fromTo(popImage, { scale: 1.1 }, { scale: 1, duration: .9, ease: "power2.out" }, "<")
+          .fromTo(bodyEls, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: .45, stagger: .07, ease: "power2.out" }, "-=.32");
+      } else {
+        backdrop.style.opacity = 1; card.style.opacity = 1;
+      }
+    }
+    function finishClose() {
+      pop.classList.remove("is-open"); pop.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+    function closeProduct() {
+      if (hasGsap) {
+        gsap.killTweensOf([backdrop, card]);
+        gsap.timeline({ onComplete: finishClose })
+          .to(card, { opacity: 0, y: 14, scale: .98, duration: .28, ease: "power2.in" })
+          .to(backdrop, { opacity: 0, duration: .28, ease: "power2.in" }, "-=.18");
+      } else { finishClose(); }
+    }
+
+    /* uzlabo saraksta vienumus -> klikšķināmi produkti */
+    var items = document.querySelectorAll(".svc--materials .svc__list li");
+    Array.prototype.forEach.call(items, function (li) {
+      var name = li.textContent.trim();
+      var p = PRODUCTS[name];
+      if (!p) return;
+      p.title = name;
+      li.classList.add("prod");
+      li.setAttribute("role", "button");
+      li.setAttribute("tabindex", "0");
+      li.setAttribute("aria-haspopup", "dialog");
+      li.addEventListener("click", function () { openProduct(p); });
+      li.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openProduct(p); }
+      });
+    });
+
+    pop.addEventListener("click", function (e) {
+      if (e.target.closest("[data-pop-close]")) closeProduct();
+    });
+    document.getElementById("popClose").addEventListener("click", closeProduct);
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && pop.classList.contains("is-open")) closeProduct();
+    });
+  })();
+
   document.getElementById("year").textContent = new Date().getFullYear();
 })();

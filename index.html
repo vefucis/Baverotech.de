@@ -350,6 +350,23 @@
     <button class="lb__nav lb__nav--next" id="lbNext" aria-label="Nākamais"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg></button>
   </div>
 
+  <!-- ===== Produkta popup ===== -->
+  <div class="pop" id="productPopup" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="popTitle">
+    <div class="pop__backdrop" data-pop-close></div>
+    <div class="pop__card" role="document">
+      <button class="pop__close" id="popClose" aria-label="Aizvērt">✕</button>
+      <div class="pop__media">
+        <img id="popImage" src="" alt="" />
+      </div>
+      <div class="pop__body">
+        <span class="pop__cat mono" id="popCat"></span>
+        <h3 class="pop__title" id="popTitle"></h3>
+        <p class="pop__desc" id="popDesc"></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
