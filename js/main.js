@@ -16,7 +16,7 @@
       cat: "Privātmāja",
       title: "Privātmājas dakstiņu jumts",
       desc: "Keramikas dakstiņu jumts ar pilnu komplektāciju. Pasegums, ventilācija, lietusūdens un sniega aizturi.",
-      meta: [["Segums", "Dakstiņi"], ["Platība", "240 m²"], ["Gads", "2024"]],
+      meta: [["Segums", "Dakstiņi"], ["Platība", "240 m²"], ["Gads", "2024"], ["Cena", "Pēc tāmes"], ["Lokācija", "Latvija"]],
       main: img("1-main", 1280, 960),
       gallery: ["1-a", "1-b", "1-c", "1-d", "1-e", "1-f", "1-g"]
     },
@@ -24,7 +24,7 @@
       cat: "Fasāde",
       title: "Fasādes apšuvums un siltināšana",
       desc: "Ventilējamā fasāde ar jaunu apšuvumu. Materiāli un montāža saskaņoti vienā risinājumā.",
-      meta: [["Sistēma", "Ventilējamā"], ["Platība", "310 m²"], ["Gads", "2023"]],
+      meta: [["Sistēma", "Ventilējamā"], ["Platība", "310 m²"], ["Gads", "2023"], ["Cena", "Pēc tāmes"], ["Lokācija", "Latvija"]],
       main: img("2-main", 1280, 960),
       gallery: ["2-a", "2-b", "2-c", "2-d", "2-e", "2-f"]
     },
@@ -32,7 +32,7 @@
       cat: "Industriāls objekts",
       title: "Industriāls trapecprofila jumts",
       desc: "Lielas platības segums ar trapecprofilu, drošības elementiem un ūdens novadīšanu. Nodots grafikā.",
-      meta: [["Segums", "Trapecprofils"], ["Platība", "2 400 m²"], ["Gads", "2025"]],
+      meta: [["Segums", "Trapecprofils"], ["Platība", "2 400 m²"], ["Gads", "2025"], ["Cena", "Pēc tāmes"], ["Lokācija", "Latvija"]],
       main: img("3-main", 1280, 960),
       gallery: ["3-a", "3-b", "3-c", "3-d", "3-e", "3-f", "3-g", "3-h"]
     }
