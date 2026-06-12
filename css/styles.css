@@ -163,6 +163,10 @@ a { color: inherit; text-decoration: none; }
 .svc__body h3 { font-family: var(--disp); font-weight: 600; font-size: clamp(1.5rem, 3vw, 2.3rem); letter-spacing: -.02em; }
 .svc__body p { color: var(--soft); margin-top: 8px; font-size: 1rem; max-width: 620px; }
 .svc__row:hover .svc__body p { color: var(--soft-2); }
+.svc__list { list-style: none; margin-top: 10px; color: var(--soft); font-size: 1rem; line-height: 1.75; max-width: 760px; }
+.svc__list li { display: inline; }
+.svc__list li:not(:last-child)::after { content: "·"; margin: 0 .55em; color: var(--accent); }
+.svc__row:hover .svc__list { color: var(--soft-2); }
 .svc__arrow { font-style: normal; font-size: 1.4rem; color: var(--soft); transition: transform .4s var(--ease), color .3s; }
 .svc__row:hover .svc__arrow { color: var(--accent); transform: translate(4px, -4px); }
 
