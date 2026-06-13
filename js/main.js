@@ -174,7 +174,7 @@
     form.querySelectorAll("input, textarea, select").forEach(function (f) { if (f.type !== "submit") f.value = ""; });
   });
 
-  /* ---- galerijas karuselis (bezgalīgs loops) ---- */
+  /* ---- galerijas karuselis ---- */
   (function () {
     var gallery = document.getElementById("gallery");
     if (!gallery) return;
@@ -192,7 +192,7 @@
       track.appendChild(clone);
     });
 
-    /* lightbox: pilna izmēra attēli (no oriģinālajiem, ne klonētajiem) */
+    /* lightbox */
     var lbImages = originals.map(function (node) {
       var im = node.querySelector("img");
       return { src: im.getAttribute("src"), cap: im.getAttribute("alt") || "" };
@@ -214,7 +214,6 @@
     function go(dir) {
       var step = itemStep();
       var set = oneSet();
-      /* pirms soļa nemanāmi pārlecam uz ekvivalento pozīciju otrā kopā, lai vienmēr ir vieta kustēties */
       if (dir > 0 && viewport.scrollLeft >= set) viewport.scrollLeft -= set;
       else if (dir < 0 && viewport.scrollLeft < step) viewport.scrollLeft += set;
       viewport.scrollBy({ left: dir * step, behavior: "smooth" });
@@ -249,11 +248,10 @@
   /* ---- Sortiments produktu popup ---- */
   (function () {
     function g(name) { return "images/Galerija/" + name + ".webp"; }
-    /* PLACEHOLDER saturs — aizvieto bildes (img) un aprakstus (desc) ar īstajiem.
-       Atslēga = saraksta vienuma teksts index.html (.svc--materials .svc__list li). */
+    /* .svc--materials .svc__list */
     var PRODUCTS = {
-      "Valcētā skārda segumi": { cat: "Jumta materiāli", img: g("stehfalzdach"), desc: "Nepārtraukti valcēts skārda segums ar slēptu savienojumu — hermētisks un izturīgs risinājums gan vienkāršām, gan sarežģītām jumta formām." },
-      "Valcprofils klik, trapecveida profils": { cat: "Jumta materiāli", img: g("trapezblech-dachdeckung"), desc: "Tērauda loksnes profili ar ātru klik savienojumu vai klasisko trapecveida formu — ekonomisks un ātri montējams jumta segums." },
+      "Valcētā skārda segumi": { cat: "Jumta materiāli", img: g("stehfalzdach"), desc: "Tradicionālais valcētais skārda jumts ir izturīgs, pārbaudīts un tiek izmantots jau vairāk nekā 100 gadus. Tas izceļas ar klasisku vertikālo šuvju dizainu, kalpošanas laiku un izcilu aizsardzību pret laikapstākļiem. Valcprofili Klasika ir mūsdienīga tradicionālā falcētā jumta variants ar ērtu *Click* savienojuma sistēmu. Šo segumu iespējams ieklāt bez valcēšanas iekārtas un citiem speciāliem instrumentiem. Loksnes tiek stiprinātas ar skrūvēm vai naglām, bet stiprinājumu vietas paliek paslēptas valcē, saglabājot tīru un sakoptu jumta izskatu." },
+      "Trapecveida profils": { cat: "Jumta materiāli", img: g("trapezblech-dachdeckung"), desc: "Trapecveida profils ir praktisks un izturīgs metāla lokšņu segums, ko izmanto gan jumtiem, gan ēku fasādēm. Materiāls ir salīdzinoši viegls, ātri montējams un ekonomisks, tāpēc tas ir piemērots gan privātmājām, gan saimniecības ēkām, angāriem, garāžām un lielākiem objektiem, kur svarīgas ir gan izmaksas, gan ilgmūžība." },
       "Bezazbesta šīferis": { cat: "Jumta materiāli", img: g("asbestfreie-wellplatten"), desc: "Mūsdienīgs šķiedru cementa vilnītis bez azbesta — drošs un ilgmūžīgs segums ar tradicionālu izskatu." },
       "Māla un betona dakstiņi": { cat: "Jumta materiāli", img: g("tondachziegel"), desc: "Dabīgi māla un betona dakstiņi ar augstu izturību un plašu krāsu klāstu reprezentablam jumtam." },
       "Skursteņu cepures": { cat: "Jumta materiāli", img: g("blechformteile"), desc: "Skursteņu pārsegi un cepures, kas pasargā dūmvadu no nokrišņiem un uzlabo vilkmi." },
