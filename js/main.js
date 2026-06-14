@@ -5,22 +5,48 @@
     return "https://picsum.photos/seed/baverotech-" + seed + "/" + w + "/" + h;
   }
 
+  /* īsts faila ceļš (images/...) tiek lietots kā ir; citādi picsum vietturis */
+  function resolve(ref, w, h) {
+    return /^images\//.test(ref) ? ref : img(ref, w, h);
+  }
+
   var PROJECTS = [
     {
-      cat: "Privātmāja",
-      title: "Privātmājas dakstiņu jumts",
-      desc: "Keramikas dakstiņu jumts ar pilnu komplektāciju. Pasegums, ventilācija, lietusūdens un sniega aizturi.",
-      meta: [["Segums", "Dakstiņi"], ["Platība", "240 m²"], ["Gads", "2024"], ["Cena", "Pēc tāmes"], ["Lokācija", "Latvija"]],
-      main: img("1-main", 1280, 960),
-      gallery: ["1-a", "1-b", "1-c", "1-d", "1-e", "1-f", "1-g"]
+      cat: "Daudzdzīvokļu nams",
+      title: "Valcprofila jumta montāža daudzdzīvokļu namam Anklamā",
+      desc: "Tradicionālā valcprofila jumta seguma montāža daudzdzīvokļu namam Anklamā, Vācijā. Pilns risinājums no seguma līdz jumta drošības elementiem.",
+      meta: [["Segums", "Valcprofils"], ["Platība", "—"], ["Gads", "2024"], ["Cena", "—"], ["Lokācija", "Vācija"]],
+      main: "images/Portfolio/Anklam/anklam_1.webp",
+      gallery: [
+        "images/Portfolio/Anklam/anklam_2.webp",
+        "images/Portfolio/Anklam/anklam_3.webp",
+        "images/Portfolio/Anklam/anklam_4.webp",
+        "images/Portfolio/Anklam/anklam_5.webp",
+        "images/Portfolio/Anklam/anklam_6.webp",
+        "images/Portfolio/Anklam/anklam_7.webp",
+        "images/Portfolio/Anklam/anklam_8.webp",
+        "images/Portfolio/Anklam/anklam_9.webp",
+        "images/Portfolio/Anklam/anklam_10.webp"
+      ]
     },
     {
-      cat: "Fasāde",
-      title: "Fasādes apšuvums un siltināšana",
-      desc: "Ventilējamā fasāde ar jaunu apšuvumu. Materiāli un montāža saskaņoti vienā risinājumā.",
-      meta: [["Sistēma", "Ventilējamā"], ["Platība", "310 m²"], ["Gads", "2023"], ["Cena", "Pēc tāmes"], ["Lokācija", "Latvija"]],
-      main: img("2-main", 1280, 960),
-      gallery: ["2-a", "2-b", "2-c", "2-d", "2-e", "2-f"]
+      cat: "Jumta konstrukcija",
+      title: "Jumta konstrukcijas izbūve privātmājai",
+      desc: "Jumta nesošās konstrukcijas izbūve privātmājai — karkasa montāža, sagatavojot pamatu seguma ieklāšanai.",
+      meta: [["Segums", "—"], ["Platība", "—"], ["Gads", "—"], ["Cena", "—"], ["Lokācija", "Latvija"]],
+      main: "images/Portfolio/Ziperkalns/ziperkalns.webp",
+      gallery: [
+        "images/Portfolio/Ziperkalns/ziperkalns_1.webp",
+        "images/Portfolio/Ziperkalns/ziperkalns_2.webp",
+        "images/Portfolio/Ziperkalns/ziperkalns_3.webp",
+        "images/Portfolio/Ziperkalns/ziperkalns_4.webp",
+        "images/Portfolio/Ziperkalns/ziperkalns_5.webp",
+        "images/Portfolio/Ziperkalns/ziperkalns_6.webp",
+        "images/Portfolio/Ziperkalns/ziperkalns_7.webp",
+        "images/Portfolio/Ziperkalns/ziperkalns_8.webp",
+        "images/Portfolio/Ziperkalns/ziperkalns_9.webp",
+        "images/Portfolio/Ziperkalns/ziperkalns_10.webp"
+      ]
     },
     {
       cat: "Industriāls objekts",
@@ -42,7 +68,7 @@
         return '<button class="thumb thumb--more" data-project="' + pIndex + '" data-index="' + dataIdx + '" aria-label="Atvērt galeriju">+' + (p.gallery.length - 4) + '</button>';
       }
       return '<button class="thumb" data-project="' + pIndex + '" data-index="' + dataIdx + '" aria-label="Atvērt attēlu">' +
-               '<img src="' + img(seed, 320, 320) + '" alt="' + p.title + ', attēls ' + dataIdx + '" loading="lazy" /></button>';
+               '<img src="' + resolve(seed, 320, 320) + '" alt="' + p.title + ', attēls ' + dataIdx + '" loading="lazy" /></button>';
     }).join("");
   }
 
@@ -80,7 +106,7 @@
   function projectImages(p) {
     var imgs = [{ src: PROJECTS[p].main, cap: PROJECTS[p].title }];
     PROJECTS[p].gallery.forEach(function (seed) {
-      imgs.push({ src: img(seed, 1500, 1050), cap: PROJECTS[p].title });
+      imgs.push({ src: resolve(seed, 1500, 1050), cap: PROJECTS[p].title });
     });
     return imgs;
   }

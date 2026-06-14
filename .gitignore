@@ -5,3 +5,8 @@ yarn-debug.log*
 yarn-error.log*
 .DS_Store
 Thumbs.db
+
+# Portfolio source originals (sajta lieto tikai .webp)
+images/Portfolio/**/png/
+images/Portfolio/*.jpg
+images/Portfolio/*.jpeg
